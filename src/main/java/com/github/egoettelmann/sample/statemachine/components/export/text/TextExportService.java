@@ -2,21 +2,26 @@ package com.github.egoettelmann.sample.statemachine.components.export.text;
 
 import com.github.egoettelmann.sample.statemachine.config.AppProperties;
 import com.github.egoettelmann.sample.statemachine.core.ExportService;
+import com.github.egoettelmann.sample.statemachine.core.FileUtils;
 import com.github.egoettelmann.sample.statemachine.core.dtos.CellColor;
 import com.github.egoettelmann.sample.statemachine.core.dtos.grid.Coordinates;
 import com.github.egoettelmann.sample.statemachine.core.dtos.grid.Grid;
 import com.github.egoettelmann.sample.statemachine.core.exceptions.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Service
+@Profile("export-as-txt")
 class TextExportService implements ExportService {
 
     /**
@@ -51,19 +56,16 @@ class TextExportService implements ExportService {
      */
     @Override
     public void export(Grid<CellColor> gridState) {
-        String fileName = UUID.randomUUID().toString() + ".txt";
-        String targetFilePath = appProperties.getOutputPath() + fileName;
+        File file = FileUtils.generateFile(appProperties.getOutputPath(), "txt");
         try {
-            File file = new File(targetFilePath);
-            file.getParentFile().mkdirs();
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-
             write(writer, gridState);
             writer.close();
         } catch (IOException e) {
-            log.error("Impossible to export as file: ", e);
-            throw new AppException("Error while writing file", e);
+            log.error("Impossible to export as text: ", e);
+            throw new AppException("Error while writing text file", e);
         }
+        log.info("Created file '{}'", file.getPath());
     }
 
     /**
@@ -81,6 +83,7 @@ class TextExportService implements ExportService {
             writer.newLine();
 
             for (Long x = gridLimits.getFirst().getX(); x <= gridLimits.getSecond().getX(); x++) {
+                log.debug("Writing to coordinates ({},{})", x, y);
                 Coordinates position = new Coordinates(x, y);
 
                 if (position.equals(gridState.getCurrentPosition())) {
@@ -106,6 +109,7 @@ class TextExportService implements ExportService {
         if (currentCell != null) {
             color = CellColor.WHITE.equals(currentCell) ? TEXT_WHITE : TEXT_BLACK;
         }
+        log.debug("Writing cell with color: '{}'", color);
         writer.append(color);
     }
 
@@ -130,6 +134,7 @@ class TextExportService implements ExportService {
         if (270 == currentOrientation) {
             pointer = TEXT_LEFT;
         }
+        log.debug("Writing current position with orientation: '{}'", pointer);
         writer.append(pointer);
     }
 
