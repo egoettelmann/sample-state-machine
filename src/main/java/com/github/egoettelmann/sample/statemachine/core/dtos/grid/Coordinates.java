@@ -1,5 +1,6 @@
 package com.github.egoettelmann.sample.statemachine.core.dtos.grid;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,8 @@ public class Coordinates {
      */
     private Long y;
 
+    @JsonValue
+    public String asKey() {
+        return x + ":" + y;
+    }
 }
