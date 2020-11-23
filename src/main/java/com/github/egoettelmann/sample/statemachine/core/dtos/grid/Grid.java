@@ -1,12 +1,14 @@
 package com.github.egoettelmann.sample.statemachine.core.dtos.grid;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.util.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@ToString
 public class Grid<T> {
 
     /**

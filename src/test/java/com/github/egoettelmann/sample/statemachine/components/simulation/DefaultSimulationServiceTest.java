@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test results are described visually in comments with:
- *  - 'x': black cell
- *  - 'o': white cell
- *  - '>'/'v'/'<'/'^': current position with orientation
+ * - 'x': black cell
+ * - 'o': white cell
+ * - '>'/'v'/'<'/'^': current position with orientation
  */
 public class DefaultSimulationServiceTest {
 
-    private final DefaultSimulationService simulationService = new DefaultSimulationService();
+    private final DefaultSimulationService simulationService = new DefaultSimulationService(System.out::println);
 
     private static final Coordinates COORDINATES_0 = new Coordinates(0L, 0L);
     private static final Coordinates COORDINATES_1 = new Coordinates(0L, -1L);
