@@ -33,6 +33,10 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 You can use the Swagger interface to perform simulations on the app:
  - <http://localhost:8080/swagger-ui.html>
 
+By default, simulations are exported as `png` images in the `output` folder.
+ - the output path can be configured with the `state-machine-app.output-path` configuration property
+ - simulations can also be exported as text files by replacing the included `export-as-img` Spring profile with `export-as-txt`
+
 ## Project overview
 
 The application follows a [package-by-component](http://www.codingthearchitecture.com/2015/03/08/package_by_component_and_architecturally_aligned_testing.html) structure.
@@ -42,3 +46,4 @@ The application follows a [package-by-component](http://www.codingthearchitectur
  - The application uses SpringBoot
  - Rest error handling is done with `org.zalando:problem-spring-web`
  - Rest endpoints are described with `springdoc-openapi` (Swagger for OpenAPI v3 specs)
+ - Images are generated with AWT
