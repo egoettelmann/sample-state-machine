@@ -1,10 +1,14 @@
 package com.github.egoettelmann.sample.statemachine.core;
 
-import com.github.egoettelmann.sample.statemachine.core.dtos.CellColor;
-import com.github.egoettelmann.sample.statemachine.core.dtos.grid.Grid;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.github.fge.jsonpatch.JsonPatch;
 
 public interface StatefulSimulationService {
 
-    Grid<CellColor> nextState();
+    JsonNode reset();
+
+    JsonNode current();
+
+    JsonPatch next();
 
 }

@@ -1,6 +1,7 @@
 package com.github.egoettelmann.sample.statemachine.config.rest;
 
 import com.github.egoettelmann.sample.statemachine.core.exceptions.AppException;
+import com.github.egoettelmann.sample.statemachine.core.exceptions.NotInitializedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,16 @@ public class ControllerExceptionHandler implements ProblemHandling {
     public ResponseEntity<Problem> handleAppException(AppException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
                 .withStatus(Status.INTERNAL_SERVER_ERROR)
+                .with("message", ex.getMessage())
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler(NotInitializedException.class)
+    @ResponseBody
+    public ResponseEntity<Problem> handleNotInitializedException(NotInitializedException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.BAD_REQUEST)
                 .with("message", ex.getMessage())
                 .build();
         return create(ex, problem, request);
