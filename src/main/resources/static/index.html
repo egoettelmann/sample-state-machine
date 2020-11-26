@@ -26,6 +26,13 @@
 <div id="app">
     <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Sample State Machine App</a>
+        <button v-if="cells"
+                type="button"
+                class="btn btn-info btn-sm"
+                disabled>
+            <span>Moves :</span>
+            <span class="badge badge-light">{{ cells.length - 1 }}</span>
+        </button>
         <form class="form-inline">
             <button v-on:click="play"
                     v-bind:disabled="playing.ongoing"
@@ -74,7 +81,7 @@
 <script>
     const API_URI = 'http://localhost:8080/state';
     const CELL_WIDTH = 10;
-    const NEXT_DELAY = 100;
+    const NEXT_DELAY = 10;
 
     const app = new Vue({
         el: '#app',
