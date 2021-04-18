@@ -1,5 +1,7 @@
 # Sample State Machine App
 
+![CircleCI build (develop)](https://img.shields.io/circleci/build/github/egoettelmann/sample-state-machine/develop?label=Develop&style=flat-square)
+
 Sample project implementing a state machine.
 
 ## Requirements
