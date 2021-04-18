@@ -96,13 +96,14 @@ jobs:
             git tag -a "v$PROJECT_VERSION" -m "Release $PROJECT_VERSION"
             git push --follow-tags https://${GITHUB_TOKEN}@github.com/egoettelmann/sample-state-machine.git HEAD:<< pipeline.parameters.branch-master >>
             DATA="{\"tag_name\": \"v$PROJECT_VERSION\", \"name\": \"$PROJECT_VERSION\", \"draft\": false, \"prerelease\": false}"
-            SUCCESS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" --data $DATA https://api.github.com/repos/egoettelmann/sample-state-machine/releases)
+            SUCCESS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -d "${DATA}" https://api.github.com/repos/egoettelmann/sample-state-machine/releases)
+            echo "$SUCCESS"
             ASSET=$(find ./target -type f -iname "sample-state-machine-*.jar" | head -1)
-            ASSET_NAME=$(basename $ASSET)
-            UPLOAD_URL=$(echo $SUCCESS | grep upload_url)
-            UPLOAD_URL=$(echo $UPLOAD_URL | cut -d "\"" -f4 | cut -d "{" -f1)
-            UPLOAD_URL="$UPLOAD_URL?name=${ASSET_NAME}"
-            SUCCESS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Content-Type: $(file -b --mime-type ${ASSET})" --data-binary @${ASSET} $UPLOAD_URL)
+            ASSET_NAME=$(basename "${ASSET}")
+            UPLOAD_URL=$(echo "${SUCCESS}" | grep upload_url)
+            UPLOAD_URL=$(echo "${UPLOAD_URL}" | cut -d "\"" -f4 | cut -d "{" -f1)
+            UPLOAD_URL="${UPLOAD_URL}?name=${ASSET_NAME}"
+            SUCCESS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -H "Content-Type: $(file -b --mime-type application/octet-stream)" --data-binary @"${ASSET}" "${UPLOAD_URL}")
       - persist_to_workspace:
           root: .
           paths:
