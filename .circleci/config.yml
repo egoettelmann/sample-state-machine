@@ -159,7 +159,7 @@ workflows:
               only: /.*/
       - release:
           requires:
-            - deploy
+            - build
           filters:
             branches:
               only: << pipeline.parameters.branch-release >>
